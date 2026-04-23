@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Empire Access 3D Print Request Portal</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="container">
+      <h1>Empire Access 3D Print Request Portal</h1>
+      <p>
+        Internal request site for technicians to request 3D-printed parts.
+      </p>
+    </header>
+
+    <main class="container grid">
+      <section>
+        <h2>Available Prints</h2>
+        <div id="products" class="cards" aria-live="polite"></div>
+      </section>
+
+      <aside>
+        <h2>Your Cart</h2>
+        <div id="cart"></div>
+        <p id="total" class="total"></p>
+
+        <form id="checkout-form">
+          <h3>Checkout Details</h3>
+
+          <label for="techName">Technician Name</label>
+          <input id="techName" name="techName" required />
+
+          <label for="companyEmail">Company Email</label>
+          <input
+            id="companyEmail"
+            name="companyEmail"
+            type="email"
+            required
+            pattern=".+@empireaccess\.com"
+            title="Please use your Empire Access email address"
+          />
+
+          <label for="workLocation">Area / Town / City</label>
+          <input id="workLocation" name="workLocation" required />
+
+          <button type="submit">Send Request</button>
+          <p class="small-note">
+            This demo uses <code>mailto:</code> to prepare an email to
+            alexander.fervan@empireaccess.com. For guaranteed delivery on GitHub
+            Pages, use a form service or serverless backend.
+          </p>
+        </form>
+      </aside>
+    </main>
+
+    <footer class="container">
+      <small>© Empire Access – 3D Print Requests</small>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
