@@ -5,6 +5,8 @@ const products = [
   { id: "tool-cap", name: "Tool Cap", description: "Protective cap for field tools", unit: "ea" }
 ];
 
+const REQUEST_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+
 const cart = new Map();
 
 const productsEl = document.getElementById("products");
@@ -71,29 +73,50 @@ function renderCart() {
   });
 }
 
-function buildEmailBody(details) {
-  const lines = [...cart.entries()].map(([id, qty]) => {
+function buildRequestPayload(details) {
+  const items = [...cart.entries()].map(([id, qty]) => {
     const item = products.find((p) => p.id === id);
-    return `- ${item.name}: ${qty} ${item.unit}`;
+    return {
+      id: item.id,
+      name: item.name,
+      quantity: qty,
+      unit: item.unit
+    };
   });
 
-  return [
-    "New 3D print request:",
-    "",
-    `Technician: ${details.techName}`,
-    `Email: ${details.companyEmail}`,
-    `Location: ${details.workLocation}`,
-    "",
-    "Requested items:",
-    ...lines
-  ].join("\n");
+  return {
+    technicianName: details.techName,
+    companyEmail: details.companyEmail,
+    workLocation: details.workLocation,
+    items
+  };
 }
 
-checkoutForm.addEventListener("submit", (event) => {
+async function submitPrintRequest(payload) {
+  const response = await fetch(REQUEST_ENDPOINT, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    throw new Error("Request failed");
+  }
+}
+
+checkoutForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   if (cart.size === 0) {
     alert("Please add at least one item to your cart before checkout.");
+    return;
+  }
+
+  if (REQUEST_ENDPOINT.includes("YOUR_FORM_ID")) {
+    alert("Set REQUEST_ENDPOINT in script.js with your real Formspree form URL before submitting requests.");
     return;
   }
 
@@ -104,10 +127,24 @@ checkoutForm.addEventListener("submit", (event) => {
     workLocation: formData.get("workLocation")?.toString().trim()
   };
 
-  const subject = encodeURIComponent(`3D Print Request - ${details.techName}`);
-  const body = encodeURIComponent(buildEmailBody(details));
+  const submitButton = checkoutForm.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+  submitButton.textContent = "Sending...";
 
-  window.location.href = `mailto:alexander.fervan@empireaccess.com?subject=${subject}&body=${body}`;
+  try {
+    const payload = buildRequestPayload(details);
+    await submitPrintRequest(payload);
+    alert("Request sent successfully.");
+
+    checkoutForm.reset();
+    cart.clear();
+    renderCart();
+  } catch (error) {
+    alert("Unable to send request. Please try again in a moment.");
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "Send Request";
+  }
 });
 
 renderProducts();
