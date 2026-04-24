@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout | Empire Access 3D Print Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="container checkout-hero">
+      <a class="back-link" href="index.html">← Continue Shopping</a>
+      <h1>Checkout</h1>
+      <p class="hero-subtitle">Review your items and submit your print request.</p>
+    </header>
+
+    <main class="container checkout-grid">
+      <section class="panel">
+        <div class="panel-title-row">
+          <h2>Your Cart</h2>
+          <span class="panel-chip">Ready to submit</span>
+        </div>
+        <div id="cart"></div>
+        <p id="total" class="total"></p>
+      </section>
+
+      <form id="checkout-form" class="panel">
+        <h3>Checkout Details</h3>
+
+        <label for="techName">Technician Name</label>
+        <input id="techName" name="techName" required />
+
+        <label for="companyEmail">Company Email</label>
+        <input
+          id="companyEmail"
+          name="companyEmail"
+          type="email"
+          required
+          pattern=".+@empireaccess\.com"
+          title="Please use your Empire Access email address"
+        />
+
+        <label for="workLocation">Area / Town / City</label>
+        <input id="workLocation" name="workLocation" required />
+
+        <label for="modelPhotos">Upload Model Photos (optional)</label>
+        <input
+          id="modelPhotos"
+          name="modelPhotos"
+          type="file"
+          accept="image/*"
+          multiple
+        />
+        <p class="small-note">You can upload multiple model reference photos.</p>
+        <div id="photo-preview" class="photo-preview" aria-live="polite"></div>
+
+        <button id="submit-request" type="submit">Send Request</button>
+        <p class="small-note">
+          Requests are sent directly from the site using a form endpoint. Update
+          <code>REQUEST_ENDPOINT</code> in <code>checkout.js</code> with your live Formspree URL.
+        </p>
+      </form>
+    </main>
+
+    <script src="products.js"></script>
+    <script src="checkout.js"></script>
+  </body>
+</html>
