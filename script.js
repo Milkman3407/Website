@@ -1,8 +1,36 @@
 const products = [
-  { id: "clip-v1", name: "Fiber Clip (v1)", description: "Cable management clip", unit: "ea" },
-  { id: "mount-v2", name: "Wall Mount Bracket (v2)", description: "Secure hardware mount", unit: "ea" },
-  { id: "tag-holder", name: "ID Tag Holder", description: "Technician tag holder", unit: "ea" },
-  { id: "tool-cap", name: "Tool Cap", description: "Protective cap for field tools", unit: "ea" }
+  {
+    id: "clip-v1",
+    name: "Fiber Clip (v1)",
+    description: "Cable routing clip for cleaner runs in tight cabinets.",
+    unit: "ea",
+    leadTime: "2-day print",
+    theme: "linear-gradient(135deg, #0f4c81, #1f8ac0)"
+  },
+  {
+    id: "mount-v2",
+    name: "Wall Mount Bracket (v2)",
+    description: "Heavy-duty mount with reinforced ribs for secure installs.",
+    unit: "ea",
+    leadTime: "3-day print",
+    theme: "linear-gradient(135deg, #533483, #7c4cc8)"
+  },
+  {
+    id: "tag-holder",
+    name: "ID Tag Holder",
+    description: "Durable holder for technician labels and equipment IDs.",
+    unit: "ea",
+    leadTime: "2-day print",
+    theme: "linear-gradient(135deg, #7a4a12, #bf7b2f)"
+  },
+  {
+    id: "tool-cap",
+    name: "Tool Cap",
+    description: "Protective end cap that shields specialty field tools.",
+    unit: "ea",
+    leadTime: "1-day print",
+    theme: "linear-gradient(135deg, #2c514c, #3b8f88)"
+  }
 ];
 
 const REQUEST_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
@@ -23,11 +51,19 @@ function renderProducts() {
     const card = document.createElement("article");
     card.className = "card";
     card.innerHTML = `
-      <h3>${p.name}</h3>
+      <div class="card-media" style="background: ${p.theme}">
+        <span class="product-unit">${p.unit}</span>
+        <span class="product-tag">${p.leadTime}</span>
+      </div>
+      <h3 class="card-title">${p.name}</h3>
       <p>${p.description}</p>
-      <label for="qty-${p.id}">Quantity</label>
-      <input id="qty-${p.id}" type="number" min="1" value="1" />
-      <button data-id="${p.id}">Add to Cart</button>
+      <div class="card-form-row">
+        <div class="qty-field">
+          <label for="qty-${p.id}">Quantity</label>
+          <input id="qty-${p.id}" type="number" min="1" value="1" />
+        </div>
+        <button data-id="${p.id}">Add to Cart</button>
+      </div>
     `;
 
     const btn = card.querySelector("button");
