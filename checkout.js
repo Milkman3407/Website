@@ -5,8 +5,6 @@ const cart = new Map(loadCartEntries());
 const cartEl = document.getElementById("cart");
 const totalEl = document.getElementById("total");
 const checkoutForm = document.getElementById("checkout-form");
-const modelPhotosInput = document.getElementById("modelPhotos");
-const photoPreviewEl = document.getElementById("photo-preview");
 
 function persistCart() {
   localStorage.setItem("printCart", JSON.stringify([...cart.entries()]));
@@ -58,16 +56,6 @@ function renderCart() {
   });
 }
 
-function renderPhotoPreview(files) {
-  photoPreviewEl.innerHTML = "";
-  [...files].slice(0, 6).forEach((file) => {
-    const image = document.createElement("img");
-    image.alt = file.name;
-    image.src = URL.createObjectURL(file);
-    photoPreviewEl.appendChild(image);
-  });
-}
-
 async function submitPrintRequest(formDataPayload) {
   const response = await fetch(REQUEST_ENDPOINT, {
     method: "POST",
@@ -79,11 +67,6 @@ async function submitPrintRequest(formDataPayload) {
     throw new Error("Request failed");
   }
 }
-
-modelPhotosInput.addEventListener("change", () => {
-  const files = modelPhotosInput.files ? [...modelPhotosInput.files] : [];
-  renderPhotoPreview(files);
-});
 
 checkoutForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -111,9 +94,6 @@ checkoutForm.addEventListener("submit", async (event) => {
   payload.set("workLocation", details.workLocation || "");
   payload.set("items", JSON.stringify(getCartItems()));
 
-  const imageFiles = modelPhotosInput.files ? [...modelPhotosInput.files] : [];
-  imageFiles.forEach((file) => payload.append("modelPhotos", file));
-
   const submitButton = document.getElementById("submit-request");
   submitButton.disabled = true;
   submitButton.textContent = "Sending...";
@@ -126,7 +106,6 @@ checkoutForm.addEventListener("submit", async (event) => {
     cart.clear();
     persistCart();
     renderCart();
-    renderPhotoPreview([]);
   } catch {
     alert("Unable to send request. Please try again in a moment.");
   } finally {
