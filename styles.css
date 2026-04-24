@@ -68,10 +68,6 @@ h1 {
   font-size: 1.08rem;
 }
 
-/* Defensive cleanup: hide legacy hero highlight chips if stale HTML is served. */
-.hero-highlights {
-  display: none !important;
-}
 
 .cta-button,
 button {
