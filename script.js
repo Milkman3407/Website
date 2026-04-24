@@ -44,6 +44,12 @@ const checkoutForm = document.getElementById("checkout-form");
 const modelPhotosInput = document.getElementById("modelPhotos");
 const photoPreviewEl = document.getElementById("photo-preview");
 
+// Defensive cleanup: remove legacy hero highlight chips if stale HTML is cached.
+const legacyHighlights = document.querySelector(".hero-highlights");
+if (legacyHighlights) {
+  legacyHighlights.remove();
+}
+
 function renderProducts() {
   productsEl.innerHTML = "";
 
