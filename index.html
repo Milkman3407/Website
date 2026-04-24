@@ -4,20 +4,39 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Empire Access 3D Print Request Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div class="bg-orb orb-1" aria-hidden="true"></div>
+    <div class="bg-orb orb-2" aria-hidden="true"></div>
+
     <header class="container hero">
-      <p class="eyebrow">Empire Access</p>
+      <div class="topbar">
+        <p class="eyebrow">Empire Access</p>
+        <span class="status-pill">Internal Portal</span>
+      </div>
       <h1>3D Print Request Portal</h1>
       <p class="hero-subtitle">
-        A cleaner, Apple-inspired experience for requesting field-ready 3D printed parts.
+        Submit part requests with a streamlined workflow designed for field technicians.
       </p>
+
+      <div class="hero-highlights" aria-hidden="true">
+        <span>Fast intake</span>
+        <span>Photo attachments</span>
+        <span>Mobile-ready</span>
+      </div>
+
       <a class="cta-button" href="#checkout-form">Request a Print</a>
     </header>
 
     <main class="container grid">
-      <section>
+      <section class="content-section">
         <div class="section-header">
           <h2>Available Prints</h2>
           <p>Select quantities and add what you need.</p>
@@ -25,9 +44,12 @@
         <div id="products" class="cards" aria-live="polite"></div>
       </section>
 
-      <aside>
+      <aside class="stacked-panels">
         <div class="panel">
-          <h2>Your Cart</h2>
+          <div class="panel-title-row">
+            <h2>Your Cart</h2>
+            <span class="panel-chip">Live summary</span>
+          </div>
           <div id="cart"></div>
           <p id="total" class="total"></p>
         </div>
@@ -64,8 +86,8 @@
 
           <button id="submit-request" type="submit">Send Request</button>
           <p class="small-note">
-            Requests are sent directly from the site using a form endpoint.
-            Update <code>REQUEST_ENDPOINT</code> in <code>script.js</code> with your live Formspree URL.
+            Requests are sent directly from the site using a form endpoint. Update
+            <code>REQUEST_ENDPOINT</code> in <code>script.js</code> with your live Formspree URL.
           </p>
         </form>
       </aside>
