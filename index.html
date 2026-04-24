@@ -7,25 +7,32 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header class="container">
-      <h1>Empire Access 3D Print Request Portal</h1>
-      <p>
-        Internal request site for technicians to request 3D-printed parts.
+    <header class="container hero">
+      <p class="eyebrow">Empire Access</p>
+      <h1>3D Print Request Portal</h1>
+      <p class="hero-subtitle">
+        A cleaner, Apple-inspired experience for requesting field-ready 3D printed parts.
       </p>
+      <a class="cta-button" href="#checkout-form">Request a Print</a>
     </header>
 
     <main class="container grid">
       <section>
-        <h2>Available Prints</h2>
+        <div class="section-header">
+          <h2>Available Prints</h2>
+          <p>Select quantities and add what you need.</p>
+        </div>
         <div id="products" class="cards" aria-live="polite"></div>
       </section>
 
       <aside>
-        <h2>Your Cart</h2>
-        <div id="cart"></div>
-        <p id="total" class="total"></p>
+        <div class="panel">
+          <h2>Your Cart</h2>
+          <div id="cart"></div>
+          <p id="total" class="total"></p>
+        </div>
 
-        <form id="checkout-form">
+        <form id="checkout-form" class="panel">
           <h3>Checkout Details</h3>
 
           <label for="techName">Technician Name</label>
@@ -44,11 +51,21 @@
           <label for="workLocation">Area / Town / City</label>
           <input id="workLocation" name="workLocation" required />
 
-          <button type="submit">Send Request</button>
+          <label for="modelPhotos">Upload Model Photos (optional)</label>
+          <input
+            id="modelPhotos"
+            name="modelPhotos"
+            type="file"
+            accept="image/*"
+            multiple
+          />
+          <p class="small-note">You can upload multiple model reference photos.</p>
+          <div id="photo-preview" class="photo-preview" aria-live="polite"></div>
+
+          <button id="submit-request" type="submit">Send Request</button>
           <p class="small-note">
-            Requests are sent directly from the site using a form endpoint
-            (no Outlook popup). Update <code>REQUEST_ENDPOINT</code> in
-            <code>script.js</code> with your live Formspree URL.
+            Requests are sent directly from the site using a form endpoint.
+            Update <code>REQUEST_ENDPOINT</code> in <code>script.js</code> with your live Formspree URL.
           </p>
         </form>
       </aside>

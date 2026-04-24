@@ -13,6 +13,8 @@ const productsEl = document.getElementById("products");
 const cartEl = document.getElementById("cart");
 const totalEl = document.getElementById("total");
 const checkoutForm = document.getElementById("checkout-form");
+const modelPhotosInput = document.getElementById("modelPhotos");
+const photoPreviewEl = document.getElementById("photo-preview");
 
 function renderProducts() {
   productsEl.innerHTML = "";
@@ -73,8 +75,8 @@ function renderCart() {
   });
 }
 
-function buildRequestPayload(details) {
-  const items = [...cart.entries()].map(([id, qty]) => {
+function getCartItems() {
+  return [...cart.entries()].map(([id, qty]) => {
     const item = products.find((p) => p.id === id);
     return {
       id: item.id,
@@ -83,29 +85,41 @@ function buildRequestPayload(details) {
       unit: item.unit
     };
   });
-
-  return {
-    technicianName: details.techName,
-    companyEmail: details.companyEmail,
-    workLocation: details.workLocation,
-    items
-  };
 }
 
-async function submitPrintRequest(payload) {
+function renderPhotoPreview(files) {
+  photoPreviewEl.innerHTML = "";
+
+  if (files.length === 0) {
+    return;
+  }
+
+  [...files].slice(0, 6).forEach((file) => {
+    const image = document.createElement("img");
+    image.alt = file.name;
+    image.src = URL.createObjectURL(file);
+    photoPreviewEl.appendChild(image);
+  });
+}
+
+async function submitPrintRequest(formDataPayload) {
   const response = await fetch(REQUEST_ENDPOINT, {
     method: "POST",
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
+      Accept: "application/json"
     },
-    body: JSON.stringify(payload)
+    body: formDataPayload
   });
 
   if (!response.ok) {
     throw new Error("Request failed");
   }
 }
+
+modelPhotosInput.addEventListener("change", () => {
+  const files = modelPhotosInput.files ? [...modelPhotosInput.files] : [];
+  renderPhotoPreview(files);
+});
 
 checkoutForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -127,18 +141,27 @@ checkoutForm.addEventListener("submit", async (event) => {
     workLocation: formData.get("workLocation")?.toString().trim()
   };
 
-  const submitButton = checkoutForm.querySelector('button[type="submit"]');
+  const payload = new FormData();
+  payload.set("technicianName", details.techName || "");
+  payload.set("companyEmail", details.companyEmail || "");
+  payload.set("workLocation", details.workLocation || "");
+  payload.set("items", JSON.stringify(getCartItems()));
+
+  const imageFiles = modelPhotosInput.files ? [...modelPhotosInput.files] : [];
+  imageFiles.forEach((file) => payload.append("modelPhotos", file));
+
+  const submitButton = document.getElementById("submit-request");
   submitButton.disabled = true;
   submitButton.textContent = "Sending...";
 
   try {
-    const payload = buildRequestPayload(details);
     await submitPrintRequest(payload);
     alert("Request sent successfully.");
 
     checkoutForm.reset();
     cart.clear();
     renderCart();
+    renderPhotoPreview([]);
   } catch (error) {
     alert("Unable to send request. Please try again in a moment.");
   } finally {
