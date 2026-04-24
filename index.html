@@ -17,15 +17,42 @@
     <div class="bg-orb orb-2" aria-hidden="true"></div>
 
     <header class="container hero">
+      <a class="cart-icon-link" href="checkout.html" aria-label="Go to checkout">
+        <span class="cart-icon" aria-hidden="true">🛒</span>
+        <span id="cart-count-badge" class="cart-count-badge">0</span>
+      </a>
+      <div class="brand-lockup" aria-label="Empire Access">
+        <svg viewBox="0 0 620 130" role="img" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+          <title>Empire Fiber Internet</title>
+          <path
+            d="M20 72c26 19 63 22 93 11"
+            fill="none"
+            stroke="#5ec13c"
+            stroke-width="7"
+            stroke-linecap="round"
+          />
+          <path
+            d="M27 82c24 15 58 17 85 9"
+            fill="none"
+            stroke="#00a0df"
+            stroke-width="4.5"
+            stroke-linecap="round"
+          />
+          <text x="38" y="82" fill="#e31f4f" font-size="95" font-weight="800" letter-spacing="1">
+            empire
+          </text>
+          <text x="255" y="108" fill="#63b942" font-size="32" font-weight="700">FIBER INTERNET</text>
+        </svg>
+      </div>
       <h1>3D Print Request Portal</h1>
       <p class="hero-subtitle">
         Browse field-ready components, add what you need, and submit one clean request in minutes.
       </p>
 
-      <a class="cta-button" href="#checkout-form">Request a Print</a>
+      <a class="cta-button" href="#products">Browse Prints</a>
     </header>
 
-    <main class="container grid">
+    <main class="container">
       <section class="content-section">
         <div class="section-header">
           <h2>Available Prints</h2>
@@ -33,60 +60,13 @@
         </div>
         <div id="products" class="cards" aria-live="polite"></div>
       </section>
-
-      <aside class="stacked-panels">
-        <div class="panel">
-          <div class="panel-title-row">
-            <h2>Your Cart</h2>
-            <span class="panel-chip">Live summary</span>
-          </div>
-          <div id="cart"></div>
-          <p id="total" class="total"></p>
-        </div>
-
-        <form id="checkout-form" class="panel">
-          <h3>Checkout Details</h3>
-
-          <label for="techName">Technician Name</label>
-          <input id="techName" name="techName" required />
-
-          <label for="companyEmail">Company Email</label>
-          <input
-            id="companyEmail"
-            name="companyEmail"
-            type="email"
-            required
-            pattern=".+@empireaccess\.com"
-            title="Please use your Empire Access email address"
-          />
-
-          <label for="workLocation">Area / Town / City</label>
-          <input id="workLocation" name="workLocation" required />
-
-          <label for="modelPhotos">Upload Model Photos (optional)</label>
-          <input
-            id="modelPhotos"
-            name="modelPhotos"
-            type="file"
-            accept="image/*"
-            multiple
-          />
-          <p class="small-note">You can upload multiple model reference photos.</p>
-          <div id="photo-preview" class="photo-preview" aria-live="polite"></div>
-
-          <button id="submit-request" type="submit">Send Request</button>
-          <p class="small-note">
-            Requests are sent directly from the site using a form endpoint. Update
-            <code>REQUEST_ENDPOINT</code> in <code>script.js</code> with your live Formspree URL.
-          </p>
-        </form>
-      </aside>
     </main>
 
     <footer class="container">
       <small>© Empire Access – 3D Print Requests</small>
     </footer>
 
+    <script src="products.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

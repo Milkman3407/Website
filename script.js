@@ -1,59 +1,21 @@
-const products = [
-  {
-    id: "clip-v1",
-    name: "Fiber Clip (v1)",
-    description: "Cable routing clip for cleaner runs in tight cabinets.",
-    unit: "ea",
-    leadTime: "2-day print",
-    theme: "linear-gradient(135deg, #0f4c81, #1f8ac0)"
-  },
-  {
-    id: "mount-v2",
-    name: "Wall Mount Bracket (v2)",
-    description: "Heavy-duty mount with reinforced ribs for secure installs.",
-    unit: "ea",
-    leadTime: "3-day print",
-    theme: "linear-gradient(135deg, #533483, #7c4cc8)"
-  },
-  {
-    id: "tag-holder",
-    name: "ID Tag Holder",
-    description: "Durable holder for technician labels and equipment IDs.",
-    unit: "ea",
-    leadTime: "2-day print",
-    theme: "linear-gradient(135deg, #7a4a12, #bf7b2f)"
-  },
-  {
-    id: "tool-cap",
-    name: "Tool Cap",
-    description: "Protective end cap that shields specialty field tools.",
-    unit: "ea",
-    leadTime: "1-day print",
-    theme: "linear-gradient(135deg, #2c514c, #3b8f88)"
-  }
-];
-
-const REQUEST_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
-
-const cart = new Map();
+const cart = new Map(loadCartEntries());
 
 const productsEl = document.getElementById("products");
-const cartEl = document.getElementById("cart");
-const totalEl = document.getElementById("total");
-const checkoutForm = document.getElementById("checkout-form");
-const modelPhotosInput = document.getElementById("modelPhotos");
-const photoPreviewEl = document.getElementById("photo-preview");
+const cartCountBadge = document.getElementById("cart-count-badge");
 
-// Defensive cleanup: remove legacy hero highlight chips if stale HTML is cached.
-const legacyHighlights = document.querySelector(".hero-highlights");
-if (legacyHighlights) {
-  legacyHighlights.remove();
+function persistCart() {
+  localStorage.setItem("printCart", JSON.stringify([...cart.entries()]));
+}
+
+function updateCartBadge() {
+  const totalQty = [...cart.values()].reduce((sum, qty) => sum + qty, 0);
+  cartCountBadge.textContent = String(totalQty);
 }
 
 function renderProducts() {
   productsEl.innerHTML = "";
 
-  for (const p of products) {
+  for (const p of PRODUCTS) {
     const card = document.createElement("article");
     card.className = "card";
     card.innerHTML = `
@@ -80,137 +42,13 @@ function renderProducts() {
 
       const current = cart.get(p.id) || 0;
       cart.set(p.id, current + qty);
-      renderCart();
+      persistCart();
+      updateCartBadge();
     });
 
     productsEl.appendChild(card);
   }
 }
 
-function renderCart() {
-  if (cart.size === 0) {
-    cartEl.innerHTML = "<p>Your cart is empty.</p>";
-    totalEl.textContent = "";
-    return;
-  }
-
-  const itemsHtml = [...cart.entries()]
-    .map(([id, qty]) => {
-      const item = products.find((p) => p.id === id);
-      return `
-        <li>
-          ${item.name} — ${qty} ${item.unit}
-          <button data-remove="${id}">Remove</button>
-        </li>
-      `;
-    })
-    .join("");
-
-  cartEl.innerHTML = `<ul>${itemsHtml}</ul>`;
-  totalEl.textContent = `Total line items: ${cart.size}`;
-
-  cartEl.querySelectorAll("button[data-remove]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      cart.delete(btn.dataset.remove);
-      renderCart();
-    });
-  });
-}
-
-function getCartItems() {
-  return [...cart.entries()].map(([id, qty]) => {
-    const item = products.find((p) => p.id === id);
-    return {
-      id: item.id,
-      name: item.name,
-      quantity: qty,
-      unit: item.unit
-    };
-  });
-}
-
-function renderPhotoPreview(files) {
-  photoPreviewEl.innerHTML = "";
-
-  if (files.length === 0) {
-    return;
-  }
-
-  [...files].slice(0, 6).forEach((file) => {
-    const image = document.createElement("img");
-    image.alt = file.name;
-    image.src = URL.createObjectURL(file);
-    photoPreviewEl.appendChild(image);
-  });
-}
-
-async function submitPrintRequest(formDataPayload) {
-  const response = await fetch(REQUEST_ENDPOINT, {
-    method: "POST",
-    headers: {
-      Accept: "application/json"
-    },
-    body: formDataPayload
-  });
-
-  if (!response.ok) {
-    throw new Error("Request failed");
-  }
-}
-
-modelPhotosInput.addEventListener("change", () => {
-  const files = modelPhotosInput.files ? [...modelPhotosInput.files] : [];
-  renderPhotoPreview(files);
-});
-
-checkoutForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  if (cart.size === 0) {
-    alert("Please add at least one item to your cart before checkout.");
-    return;
-  }
-
-  if (REQUEST_ENDPOINT.includes("YOUR_FORM_ID")) {
-    alert("Set REQUEST_ENDPOINT in script.js with your real Formspree form URL before submitting requests.");
-    return;
-  }
-
-  const formData = new FormData(checkoutForm);
-  const details = {
-    techName: formData.get("techName")?.toString().trim(),
-    companyEmail: formData.get("companyEmail")?.toString().trim(),
-    workLocation: formData.get("workLocation")?.toString().trim()
-  };
-
-  const payload = new FormData();
-  payload.set("technicianName", details.techName || "");
-  payload.set("companyEmail", details.companyEmail || "");
-  payload.set("workLocation", details.workLocation || "");
-  payload.set("items", JSON.stringify(getCartItems()));
-
-  const imageFiles = modelPhotosInput.files ? [...modelPhotosInput.files] : [];
-  imageFiles.forEach((file) => payload.append("modelPhotos", file));
-
-  const submitButton = document.getElementById("submit-request");
-  submitButton.disabled = true;
-  submitButton.textContent = "Sending...";
-
-  try {
-    await submitPrintRequest(payload);
-    alert("Request sent successfully.");
-
-    checkoutForm.reset();
-    cart.clear();
-    renderCart();
-    renderPhotoPreview([]);
-  } catch (error) {
-    alert("Unable to send request. Please try again in a moment.");
-  } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = "Send Request";
-  }
-});
-
 renderProducts();
-renderCart();
+updateCartBadge();
