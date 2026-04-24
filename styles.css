@@ -49,12 +49,12 @@ body {
 }
 
 .brand-lockup {
-  width: min(215px, 100%);
+  width: min(430px, 100%);
   margin: 0 auto 1rem;
   background: #fff;
   border: 2px solid #ffd3e1;
   border-radius: 16px;
-  padding: 0.35rem 0.5rem;
+  padding: 0.7rem 1rem;
   box-shadow: 0 10px 24px rgba(227, 31, 79, 0.12);
 }
 
