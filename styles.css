@@ -42,23 +42,6 @@ body {
   padding-bottom: 2rem;
 }
 
-.topbar {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin-bottom: 0.8rem;
-}
-
-.eyebrow {
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-weight: 700;
-  color: #59554d;
-  margin: 0;
-  font-size: 0.78rem;
-}
-
-.status-pill,
 .panel-chip {
   display: inline-flex;
   align-items: center;
@@ -84,6 +67,7 @@ h1 {
   color: var(--muted);
   font-size: 1.08rem;
 }
+
 
 .cta-button,
 button {
