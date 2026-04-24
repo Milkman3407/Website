@@ -1,4 +1,4 @@
-const REQUEST_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+const REQUEST_ENDPOINT = "https://formspree.io/f/xkokkeby";
 
 const cart = new Map(loadCartEntries());
 
