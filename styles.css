@@ -366,7 +366,7 @@ footer small {
 
 #submit-request {
   background: linear-gradient(135deg, #2563eb, #4338ca);
-
+}
 
 .stacked-panels {
   position: sticky;
@@ -382,6 +382,71 @@ footer {
 code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
     monospace;
+}
+
+
+.product-preview {
+  min-height: 168px;
+  align-items: stretch;
+}
+
+.mount-illustration {
+  position: absolute;
+  inset: 2.5rem 1rem 0.8rem;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+}
+
+.mount-device {
+  width: 74px;
+  height: 86px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 50% 24%, rgba(17, 24, 39, 0.14) 0 2px, transparent 3px) 0 0 / 12px 12px,
+    linear-gradient(180deg, #f7f2e8, #e8dfd2);
+  border: 2px solid rgba(255, 255, 255, 0.88);
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.25);
+}
+
+.mount-top,
+.mount-bottom {
+  position: absolute;
+  width: 94px;
+  height: 20px;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #2d3748, #111827);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 8px 14px rgba(0, 0, 0, 0.24);
+}
+
+.mount-top {
+  top: 6px;
+}
+
+.mount-top::before {
+  content: "";
+  position: absolute;
+  left: -9px;
+  top: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px 999px 999px 0;
+  background: var(--product-accent, #f97316);
+  transform: rotate(25deg);
+}
+
+.mount-bottom {
+  bottom: 0;
+  width: 82px;
+}
+
+.product-detail {
+  min-height: auto;
+  margin-top: -0.25rem;
+  color: #334155;
+  font-size: 0.88rem;
+  font-weight: 700;
 }
 
 @media (max-width: 1080px) {
@@ -426,4 +491,15 @@ code {
   .card button {
     width: 100%;
   }
+}
+
+.request-summary {
+  margin: 1rem 0 0;
+  white-space: pre-wrap;
+  color: #172033;
+  background: #eff6ff;
+  border: 1px solid #bfd3f5;
+  border-radius: 12px;
+  padding: 0.85rem;
+  min-height: 6rem;
 }

@@ -1,35 +1,13 @@
 const PRODUCTS = [
   {
-    id: "clip-v1",
-    name: "Cable Clip (v1)",
-    description: "Cable routing clip for cleaner runs in tight cabinets.",
+    id: "airties-wall-mount",
+    name: "AirTies Wall Mount",
+    description: "Printed wall-mount cradle for AirTies Wi-Fi units with a secure top-and-bottom hold.",
     unit: "ea",
-    leadTime: "2-day print",
-    theme: "linear-gradient(135deg, #2563eb, #06b6d4)"
-  },
-  {
-    id: "mount-v2",
-    name: "Wall Mount Bracket (v2)",
-    description: "Heavy-duty mount with reinforced ribs for secure installs.",
-    unit: "ea",
-    leadTime: "3-day print",
-    theme: "linear-gradient(135deg, #1e3a8a, #2563eb)"
-  },
-  {
-    id: "tag-holder",
-    name: "ID Tag Holder",
-    description: "Durable holder for labels and equipment IDs.",
-    unit: "ea",
-    leadTime: "2-day print",
-    theme: "linear-gradient(135deg, #0f766e, #14b8a6)"
-  },
-  {
-    id: "tool-cap",
-    name: "Tool Cap",
-    description: "Protective end cap that shields specialty field tools.",
-    unit: "ea",
-    leadTime: "1-day print",
-    theme: "linear-gradient(135deg, #312e81, #7c3aed)"
+    leadTime: "Ready to print",
+    material: "Black filament",
+    theme: "linear-gradient(135deg, #111827, #374151)",
+    accent: "#f97316"
   }
 ];
 
@@ -41,9 +19,11 @@ function loadCartEntries() {
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
 
+    const productIds = new Set(PRODUCTS.map((product) => product.id));
+
     return parsed.filter((entry) => {
       const [id, qty] = entry;
-      return typeof id === "string" && Number.isFinite(qty) && qty > 0;
+      return typeof id === "string" && productIds.has(id) && Number.isFinite(qty) && qty > 0;
     });
   } catch {
     return [];
