@@ -1,4 +1,4 @@
-# Empire Access 3D Print Request Portal
+# 3D Print Request Portal
 
 This is a static website starter you can host on GitHub Pages for internal 3D print requests.
 
