@@ -19,12 +19,18 @@ function renderProducts() {
     const card = document.createElement("article");
     card.className = "card";
     card.innerHTML = `
-      <div class="card-media" style="background: ${p.theme}">
+      <div class="card-media product-preview" style="background: ${p.theme}; --product-accent: ${p.accent}">
         <span class="product-unit">${p.unit}</span>
         <span class="product-tag">${p.leadTime}</span>
+        <div class="mount-illustration" aria-hidden="true">
+          <span class="mount-top"></span>
+          <span class="mount-device"></span>
+          <span class="mount-bottom"></span>
+        </div>
       </div>
       <h3 class="card-title">${p.name}</h3>
       <p>${p.description}</p>
+      <p class="product-detail">${p.material}</p>
       <div class="card-form-row">
         <div class="qty-field">
           <label for="qty-${p.id}">Quantity</label>
