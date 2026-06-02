@@ -5,7 +5,7 @@ const PRODUCTS = [
     description: "Cable routing clip for cleaner runs in tight cabinets.",
     unit: "ea",
     leadTime: "2-day print",
-    theme: "linear-gradient(135deg, #e31f4f, #00a0df)"
+    theme: "linear-gradient(135deg, #2563eb, #06b6d4)"
   },
   {
     id: "mount-v2",
@@ -13,7 +13,7 @@ const PRODUCTS = [
     description: "Heavy-duty mount with reinforced ribs for secure installs.",
     unit: "ea",
     leadTime: "3-day print",
-    theme: "linear-gradient(135deg, #a1164c, #e31f4f)"
+    theme: "linear-gradient(135deg, #1e3a8a, #2563eb)"
   },
   {
     id: "tag-holder",
@@ -21,7 +21,7 @@ const PRODUCTS = [
     description: "Durable holder for technician labels and equipment IDs.",
     unit: "ea",
     leadTime: "2-day print",
-    theme: "linear-gradient(135deg, #2f9440, #63b942)"
+    theme: "linear-gradient(135deg, #0f766e, #14b8a6)"
   },
   {
     id: "tool-cap",
@@ -29,7 +29,7 @@ const PRODUCTS = [
     description: "Protective end cap that shields specialty field tools.",
     unit: "ea",
     leadTime: "1-day print",
-    theme: "linear-gradient(135deg, #4c1b3a, #00a0df)"
+    theme: "linear-gradient(135deg, #312e81, #7c3aed)"
   }
 ];
 
