@@ -1,7 +1,7 @@
 const PRODUCTS = [
   {
     id: "clip-v1",
-    name: "Fiber Clip (v1)",
+    name: "Cable Clip (v1)",
     description: "Cable routing clip for cleaner runs in tight cabinets.",
     unit: "ea",
     leadTime: "2-day print",
@@ -18,7 +18,7 @@ const PRODUCTS = [
   {
     id: "tag-holder",
     name: "ID Tag Holder",
-    description: "Durable holder for technician labels and equipment IDs.",
+    description: "Durable holder for labels and equipment IDs.",
     unit: "ea",
     leadTime: "2-day print",
     theme: "linear-gradient(135deg, #0f766e, #14b8a6)"
