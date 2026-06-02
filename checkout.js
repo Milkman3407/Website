@@ -1,5 +1,3 @@
-const REQUEST_ENDPOINT = "https://formspree.io/f/xkokkeby";
-
 const cart = new Map(loadCartEntries());
 
 const cartEl = document.getElementById("cart");
@@ -56,61 +54,40 @@ function renderCart() {
   });
 }
 
-async function submitPrintRequest(formDataPayload) {
-  const response = await fetch(REQUEST_ENDPOINT, {
-    method: "POST",
-    headers: { Accept: "application/json" },
-    body: formDataPayload
+function buildRequestSummary() {
+  const lines = ["3D Print Request", "", "Items:"];
+
+  getCartItems().forEach((item) => {
+    lines.push(`- ${item.name}: ${item.quantity} ${item.unit}`);
   });
 
-  if (!response.ok) {
-    throw new Error("Request failed");
-  }
+  lines.push("", `Total quantity: ${[...cart.values()].reduce((sum, qty) => sum + qty, 0)}`);
+  return lines.join("\n");
 }
 
 checkoutForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   if (cart.size === 0) {
-    alert("Your cart is empty. Add at least one item before checking out.");
+    alert("Your cart is empty. Add at least one item before preparing a request summary.");
     return;
   }
 
-  if (REQUEST_ENDPOINT.includes("YOUR_FORM_ID")) {
-    alert("Set REQUEST_ENDPOINT in checkout.js with your real Formspree form URL before submitting requests.");
-    return;
-  }
-
-  const formData = new FormData(checkoutForm);
-  const details = {
-    techName: formData.get("techName")?.toString().trim(),
-    companyEmail: formData.get("companyEmail")?.toString().trim(),
-    workLocation: formData.get("workLocation")?.toString().trim()
-  };
-
-  const payload = new FormData();
-  payload.set("technicianName", details.techName || "");
-  payload.set("companyEmail", details.companyEmail || "");
-  payload.set("workLocation", details.workLocation || "");
-  payload.set("items", JSON.stringify(getCartItems()));
-
+  const summary = buildRequestSummary();
+  const summaryEl = document.getElementById("request-summary");
   const submitButton = document.getElementById("submit-request");
-  submitButton.disabled = true;
-  submitButton.textContent = "Sending...";
+
+  summaryEl.textContent = summary;
 
   try {
-    await submitPrintRequest(payload);
-    alert("Request sent successfully.");
-
-    checkoutForm.reset();
-    cart.clear();
-    persistCart();
-    renderCart();
+    await navigator.clipboard.writeText(summary);
+    submitButton.textContent = "Copied";
   } catch {
-    alert("Unable to send request. Please try again in a moment.");
+    submitButton.textContent = "Summary Ready";
   } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = "Send Request";
+    window.setTimeout(() => {
+      submitButton.textContent = "Copy Request Summary";
+    }, 1800);
   }
 });
 
