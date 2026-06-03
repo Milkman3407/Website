@@ -6,6 +6,18 @@ const PRODUCTS = [
     unit: "ea",
     leadTime: "Ready to print",
     material: "Black filament",
+    images: [
+      {
+        src: "https://media.githubusercontent.com/media/Milkman3407/Website/main/Inventory/AirTies%20Wall%20Mount/airties-wall-mount-bracket.jpg",
+        alt: "AirTies wall mount bracket before installation",
+        label: "Bracket"
+      },
+      {
+        src: "https://media.githubusercontent.com/media/Milkman3407/Website/main/Inventory/AirTies%20Wall%20Mount/airties-wall-mount-installed.jpg",
+        alt: "AirTies wall mount installed with an AirTies Wi-Fi unit",
+        label: "Installed"
+      }
+    ],
     theme: "linear-gradient(135deg, #111827, #374151)",
     accent: "#f97316"
   }
