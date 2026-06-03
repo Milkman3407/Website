@@ -20,6 +20,16 @@ const PRODUCTS = [
     ],
     theme: "linear-gradient(135deg, #111827, #374151)",
     accent: "#f97316"
+  },
+  {
+    id: "nokia-xs010x-q-bracket",
+    name: "Nokia XS010X-Q Bracket",
+    description: "Printed cradle-style bracket for Nokia XS010X-Q ONT units, with raised side rails and screw-mount holes.",
+    unit: "ea",
+    leadTime: "Ready to print",
+    material: "White filament",
+    theme: "linear-gradient(135deg, #0f172a, #475569)",
+    accent: "#38bdf8"
   }
 ];
 
