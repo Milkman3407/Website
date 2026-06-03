@@ -18,6 +18,26 @@ const PRODUCTS = [
         label: "Unit installed"
       }
     ]
+  },
+  {
+    id: "airties-bracket",
+    name: "AirTies Bracket",
+    description: "Printed bracket for AirTies Wi-Fi units, with a fitted top clip and lower support cradle.",
+    unit: "ea",
+    leadTime: "Ready to print",
+    material: "Black filament",
+    images: [
+      {
+        src: "Inventory/AirTies/AirTie%2001.jpg",
+        alt: "Empty black AirTies bracket on a 3D printer bed",
+        label: "Empty bracket"
+      },
+      {
+        src: "Inventory/AirTies/AirTie%2002.jpg",
+        alt: "AirTies Wi-Fi unit seated in the printed bracket",
+        label: "Unit installed"
+      }
+    ]
   }
 ];
 
