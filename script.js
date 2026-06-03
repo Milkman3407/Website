@@ -12,55 +12,38 @@ function updateCartBadge() {
   cartCountBadge.textContent = String(totalQty);
 }
 
-function productMediaMarkup(product) {
-  if (Array.isArray(product.images) && product.images.length > 0) {
-    const images = product.images
-      .map(
-        (image) => `
-          <figure class="product-photo">
-            <img src="${image.src}" alt="${image.alt}" loading="lazy" />
-            <figcaption>${image.label}</figcaption>
-          </figure>
-        `
-      )
-      .join("");
-
-    return `
-      <div class="card-media product-preview product-photos" style="background: ${product.theme}; --product-accent: ${product.accent}">
-        <span class="product-unit">${product.unit}</span>
-        <span class="product-tag">${product.leadTime}</span>
-        <div class="product-photo-grid">
-          ${images}
-        </div>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="card-media product-preview" style="background: ${product.theme}; --product-accent: ${product.accent}">
-      <span class="product-unit">${product.unit}</span>
-      <span class="product-tag">${product.leadTime}</span>
-      <div class="mount-illustration" aria-hidden="true">
-        <span class="mount-top"></span>
-        <span class="mount-device"></span>
-        <span class="mount-bottom"></span>
-      </div>
-    </div>
-  `;
+function productPhotoMarkup(product) {
+  return product.images
+    .map(
+      (image) => `
+        <figure class="product-photo">
+          <img src="${image.src}" alt="${image.alt}" loading="lazy" />
+          <figcaption>${image.label}</figcaption>
+        </figure>
+      `
+    )
+    .join("");
 }
 
 function renderProducts() {
   productsEl.innerHTML = "";
 
   for (const p of PRODUCTS) {
-    const card = document.createElement("article");
-    card.className = "card";
-    card.innerHTML = `
-      ${productMediaMarkup(p)}
-      <h3 class="card-title">${p.name}</h3>
-      <p>${p.description}</p>
-      <p class="product-detail">${p.material}</p>
-      <div class="card-form-row">
+    const item = document.createElement("article");
+    item.className = "product-item";
+    item.innerHTML = `
+      <div class="product-photo-grid">
+        ${productPhotoMarkup(p)}
+      </div>
+      <div class="product-copy">
+        <div class="product-heading-row">
+          <h3 class="product-title">${p.name}</h3>
+          <span class="product-tag">${p.leadTime}</span>
+        </div>
+        <p>${p.description}</p>
+        <p class="product-detail">${p.material}</p>
+      </div>
+      <div class="product-actions">
         <div class="qty-field">
           <label for="qty-${p.id}">Quantity</label>
           <input id="qty-${p.id}" type="number" min="1" value="1" />
@@ -69,9 +52,9 @@ function renderProducts() {
       </div>
     `;
 
-    const btn = card.querySelector("button");
+    const btn = item.querySelector("button");
     btn.addEventListener("click", () => {
-      const qtyInput = card.querySelector("input");
+      const qtyInput = item.querySelector("input");
       const qty = Number(qtyInput.value);
       if (!Number.isFinite(qty) || qty < 1) return;
 
@@ -81,7 +64,7 @@ function renderProducts() {
       updateCartBadge();
     });
 
-    productsEl.appendChild(card);
+    productsEl.appendChild(item);
   }
 }
 
