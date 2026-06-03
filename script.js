@@ -12,6 +12,43 @@ function updateCartBadge() {
   cartCountBadge.textContent = String(totalQty);
 }
 
+function productMediaMarkup(product) {
+  if (Array.isArray(product.images) && product.images.length > 0) {
+    const images = product.images
+      .map(
+        (image) => `
+          <figure class="product-photo">
+            <img src="${image.src}" alt="${image.alt}" loading="lazy" />
+            <figcaption>${image.label}</figcaption>
+          </figure>
+        `
+      )
+      .join("");
+
+    return `
+      <div class="card-media product-preview product-photos" style="background: ${product.theme}; --product-accent: ${product.accent}">
+        <span class="product-unit">${product.unit}</span>
+        <span class="product-tag">${product.leadTime}</span>
+        <div class="product-photo-grid">
+          ${images}
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="card-media product-preview" style="background: ${product.theme}; --product-accent: ${product.accent}">
+      <span class="product-unit">${product.unit}</span>
+      <span class="product-tag">${product.leadTime}</span>
+      <div class="mount-illustration" aria-hidden="true">
+        <span class="mount-top"></span>
+        <span class="mount-device"></span>
+        <span class="mount-bottom"></span>
+      </div>
+    </div>
+  `;
+}
+
 function renderProducts() {
   productsEl.innerHTML = "";
 
@@ -19,15 +56,7 @@ function renderProducts() {
     const card = document.createElement("article");
     card.className = "card";
     card.innerHTML = `
-      <div class="card-media product-preview" style="background: ${p.theme}; --product-accent: ${p.accent}">
-        <span class="product-unit">${p.unit}</span>
-        <span class="product-tag">${p.leadTime}</span>
-        <div class="mount-illustration" aria-hidden="true">
-          <span class="mount-top"></span>
-          <span class="mount-device"></span>
-          <span class="mount-bottom"></span>
-        </div>
-      </div>
+      ${productMediaMarkup(p)}
       <h3 class="card-title">${p.name}</h3>
       <p>${p.description}</p>
       <p class="product-detail">${p.material}</p>
