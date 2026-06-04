@@ -1,5 +1,4 @@
 const REQUEST_ENDPOINT = "https://formspree.io/f/xkokkeby";
-const EMPIRE_EMAIL_PATTERN = /^[^\s@]+@empireaccess\.com$/i;
 
 const cart = new Map(loadCartEntries());
 
@@ -102,11 +101,6 @@ checkoutForm.addEventListener("submit", async (event) => {
     companyEmail: formData.get("companyEmail")?.toString().trim() || "",
     workLocation: formData.get("workLocation")?.toString().trim() || ""
   };
-
-  if (!EMPIRE_EMAIL_PATTERN.test(details.companyEmail)) {
-    alert("Please use your @empireaccess.com email address.");
-    return;
-  }
 
   const payload = new FormData();
   payload.set("name", details.techName);
