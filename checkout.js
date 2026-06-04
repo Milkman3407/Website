@@ -1,3 +1,6 @@
+const REQUEST_ENDPOINT = "https://formspree.io/f/xkokkeby";
+const EMPIRE_EMAIL_PATTERN = /^[^\s@]+@empireaccess\.com$/i;
+
 const cart = new Map(loadCartEntries());
 
 const cartEl = document.getElementById("cart");
@@ -54,8 +57,16 @@ function renderCart() {
   });
 }
 
-function buildRequestSummary() {
-  const lines = ["3D Print Request", "", "Items:"];
+function buildRequestSummary(details) {
+  const lines = [
+    "3D Print Request",
+    "",
+    `Technician: ${details.techName}`,
+    `Email: ${details.companyEmail}`,
+    `Location: ${details.workLocation}`,
+    "",
+    "Requested items:"
+  ];
 
   getCartItems().forEach((item) => {
     lines.push(`- ${item.name}: ${item.quantity} ${item.unit}`);
@@ -65,29 +76,63 @@ function buildRequestSummary() {
   return lines.join("\n");
 }
 
+async function submitPrintRequest(formDataPayload) {
+  const response = await fetch(REQUEST_ENDPOINT, {
+    method: "POST",
+    headers: { Accept: "application/json" },
+    body: formDataPayload
+  });
+
+  if (!response.ok) {
+    throw new Error("Request failed");
+  }
+}
+
 checkoutForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   if (cart.size === 0) {
-    alert("Your cart is empty. Add at least one item before preparing a request summary.");
+    alert("Your cart is empty. Add at least one item before checking out.");
     return;
   }
 
-  const summary = buildRequestSummary();
-  const summaryEl = document.getElementById("request-summary");
-  const submitButton = document.getElementById("submit-request");
+  const formData = new FormData(checkoutForm);
+  const details = {
+    techName: formData.get("techName")?.toString().trim() || "",
+    companyEmail: formData.get("companyEmail")?.toString().trim() || "",
+    workLocation: formData.get("workLocation")?.toString().trim() || ""
+  };
 
-  summaryEl.textContent = summary;
+  if (!EMPIRE_EMAIL_PATTERN.test(details.companyEmail)) {
+    alert("Please use your @empireaccess.com email address.");
+    return;
+  }
+
+  const payload = new FormData();
+  payload.set("name", details.techName);
+  payload.set("email", details.companyEmail);
+  payload.set("workLocation", details.workLocation);
+  payload.set("subject", `3D Print Request - ${details.techName}`);
+  payload.set("message", buildRequestSummary(details));
+  payload.set("items", JSON.stringify(getCartItems()));
+
+  const submitButton = document.getElementById("submit-request");
+  submitButton.disabled = true;
+  submitButton.textContent = "Sending...";
 
   try {
-    await navigator.clipboard.writeText(summary);
-    submitButton.textContent = "Copied";
+    await submitPrintRequest(payload);
+    alert("Request sent successfully.");
+
+    checkoutForm.reset();
+    cart.clear();
+    persistCart();
+    renderCart();
   } catch {
-    submitButton.textContent = "Summary Ready";
+    alert("Unable to send request. Please try again in a moment.");
   } finally {
-    window.setTimeout(() => {
-      submitButton.textContent = "Copy Request Summary";
-    }, 1800);
+    submitButton.disabled = false;
+    submitButton.textContent = "Send Request";
   }
 });
 
