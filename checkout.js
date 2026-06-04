@@ -114,7 +114,6 @@ checkoutForm.addEventListener("submit", async (event) => {
   payload.set("workLocation", details.workLocation);
   payload.set("subject", `3D Print Request - ${details.techName}`);
   payload.set("message", buildRequestSummary(details));
-  payload.set("items", JSON.stringify(getCartItems()));
 
   const submitButton = document.getElementById("submit-request");
   submitButton.disabled = true;

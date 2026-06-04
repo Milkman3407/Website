@@ -14,7 +14,7 @@ A static site for browsing printable models, adding items to a cart, and submitt
 
 Checkout requests are sent to Formspree from the browser using the endpoint in `REQUEST_ENDPOINT` in `checkout.js`.
 
-Each submission includes the requester name, requester email, work location, a readable message summary, and the cart line items as JSON.
+Each submission includes the requester name, requester email, work location, and a readable message summary with the requested cart items.
 
 ## Customize models
 
