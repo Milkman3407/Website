@@ -866,7 +866,7 @@ footer small {
 
 .app-topbar {
   display: grid;
-  grid-template-columns: 32px minmax(230px, 1fr) minmax(420px, auto) auto auto;
+  grid-template-columns: 32px minmax(230px, 1fr) auto auto;
   align-items: center;
   gap: 1.6rem;
   min-height: 74px;
@@ -903,38 +903,6 @@ footer small {
 .topbar-user small {
   color: var(--muted);
   font-size: 0.86rem;
-}
-
-.app-topbar__nav {
-  align-self: stretch;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.55rem;
-}
-
-.app-topbar__nav-link {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 100%;
-  color: var(--muted-strong);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.app-topbar__nav-link--active {
-  color: var(--ink);
-}
-
-.app-topbar__nav-link--active::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  background: #3182ff;
 }
 
 .topbar-cart {
@@ -1379,10 +1347,6 @@ code {
 @media (max-width: 1080px) {
   .app-topbar {
     grid-template-columns: 32px minmax(220px, 1fr) auto auto;
-  }
-
-  .app-topbar__nav {
-    display: none;
   }
 
   .premium-workbench {
