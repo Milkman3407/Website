@@ -12,30 +12,63 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body class="portal-theme portal-theme-dark">
     <div class="bg-orb orb-1" aria-hidden="true"></div>
     <div class="bg-orb orb-2" aria-hidden="true"></div>
 
-    <header class="container hero">
-      <a class="cart-icon-link" href="checkout.html" aria-label="Go to checkout">
-        <span class="cart-icon" aria-hidden="true">🛒</span>
-        <span id="cart-count-badge" class="cart-count-badge">0</span>
-      </a>
-      <h1>3D Print Request Portal</h1>
-      <p class="hero-subtitle">
-        Request available shop prints, including field-ready wall brackets and mounts.
-      </p>
+    <header class="container hero app-header">
+      <div class="app-header__brand">
+        <span class="eyebrow app-header__eyebrow">Field operations</span>
+        <h1>3D Print Request Portal</h1>
+        <p class="hero-subtitle">
+          Request available shop prints, including field-ready wall brackets and mounts.
+        </p>
+      </div>
 
-      <a class="cta-button" href="#products">Browse Prints</a>
+      <nav class="app-header__actions" aria-label="Portal actions">
+        <a class="cta-button" href="#products">Browse Prints</a>
+        <a class="cart-icon-link cart-action" href="checkout.html" aria-label="Go to checkout">
+          <span class="cart-icon" aria-hidden="true">Cart</span>
+          <span id="cart-count-badge" class="cart-count-badge">0</span>
+        </a>
+      </nav>
     </header>
 
-    <main class="container">
-      <section class="content-section">
-        <div class="section-header">
-          <h2>Available Prints</h2>
+    <main class="container catalog-shell" aria-labelledby="catalog-title">
+      <aside class="catalog-rail compact-filter-rail" aria-label="Catalog status and filters">
+        <section class="rail-panel rail-panel--status" aria-labelledby="rail-status-title">
+          <p class="rail-kicker">Catalog Status</p>
+          <h2 id="rail-status-title">Print request queue</h2>
+          <div class="rail-metrics" aria-label="Catalog metrics">
+            <div class="rail-metric">
+              <span class="rail-metric__value" id="catalog-count">2</span>
+              <span class="rail-metric__label">Active prints</span>
+            </div>
+            <div class="rail-metric">
+              <span class="rail-metric__value">Ready</span>
+              <span class="rail-metric__label">Queue state</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="rail-panel rail-panel--filters" aria-labelledby="rail-filter-title">
+          <p class="rail-kicker">Filters</p>
+          <h2 id="rail-filter-title">Field install gear</h2>
+          <div class="filter-chip-set" role="list" aria-label="Active catalog filters">
+            <span class="filter-chip filter-chip--active" role="listitem">All brackets</span>
+            <span class="filter-chip" role="listitem">ONT mounts</span>
+            <span class="filter-chip" role="listitem">Wi-Fi mounts</span>
+          </div>
+        </section>
+      </aside>
+
+      <section class="content-section catalog-content">
+        <div class="section-header catalog-header">
+          <span class="eyebrow catalog-header__eyebrow">Print queue</span>
+          <h2 id="catalog-title">Available Prints</h2>
           <p>Current print queue items are ready for installation teams.</p>
         </div>
-        <div id="products" class="product-list" aria-live="polite"></div>
+        <div id="products" class="product-list catalog-list" aria-live="polite"></div>
       </section>
     </main>
 

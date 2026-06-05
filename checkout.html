@@ -12,42 +12,63 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
-    <header class="container checkout-hero">
-      <a class="back-link" href="index.html">← Continue Shopping</a>
-      <h1>Checkout</h1>
-      <p class="hero-subtitle">Review your items and submit your print request.</p>
+  <body class="portal-theme portal-theme-dark">
+    <header class="container checkout-hero app-header app-header--checkout">
+      <div class="app-header__brand">
+        <a class="back-link" href="index.html">&larr; Continue Shopping</a>
+        <span class="eyebrow app-header__eyebrow">Request checkout</span>
+        <h1>Checkout</h1>
+        <p class="hero-subtitle">Review your items and submit your print request.</p>
+      </div>
     </header>
 
-    <main class="container checkout-grid">
-      <section class="panel">
+    <main class="container checkout-grid checkout-workbench" aria-labelledby="checkout-title">
+      <section class="panel cart-panel request-panel" aria-labelledby="checkout-title">
         <div class="panel-title-row">
-          <h2>Your Cart</h2>
-          <span class="panel-chip">Ready to submit</span>
+          <div>
+            <span class="eyebrow panel-eyebrow">Request loadout</span>
+            <h2 id="checkout-title">Your Cart</h2>
+          </div>
+          <span class="panel-chip" id="cart-status-chip">Ready to submit</span>
         </div>
-        <div id="cart"></div>
+        <div id="cart" class="cart-list-panel"></div>
         <p id="total" class="total"></p>
       </section>
 
-      <form id="checkout-form" class="panel">
-        <h3>Checkout Details</h3>
+      <div class="stacked-panels checkout-panel-stack">
+        <form id="checkout-form" class="panel request-details-panel">
+          <span class="eyebrow panel-eyebrow">Technician details</span>
+          <h3>Checkout Details</h3>
 
-        <label for="techName">Technician Name</label>
-        <input id="techName" name="techName" required />
+          <label for="techName">Technician Name</label>
+          <input id="techName" name="techName" autocomplete="name" required />
 
-        <label for="companyEmail">Company Email</label>
-        <input
-          id="companyEmail"
-          name="companyEmail"
-          type="email"
-          required
-        />
+          <label for="companyEmail">Company Email</label>
+          <input
+            id="companyEmail"
+            name="companyEmail"
+            type="email"
+            autocomplete="email"
+            required
+          />
 
-        <label for="workLocation">Area / Town / City</label>
-        <input id="workLocation" name="workLocation" required />
+          <label for="workLocation">Area / Town / City</label>
+          <input id="workLocation" name="workLocation" autocomplete="address-level2" required />
 
-        <button id="submit-request" type="submit">Send Request</button>
-      </form>
+          <button id="submit-request" type="submit">Send Request</button>
+        </form>
+
+        <aside class="panel request-summary-panel" aria-labelledby="summary-title">
+          <div class="panel-title-row">
+            <div>
+              <span class="eyebrow panel-eyebrow">Request preview</span>
+              <h3 id="summary-title">Request Summary</h3>
+            </div>
+            <span class="panel-chip summary-chip">Live preview</span>
+          </div>
+          <pre id="request-summary" class="request-summary" aria-live="polite"></pre>
+        </aside>
+      </div>
     </main>
 
     <script src="products.js?v=airties-bracket"></script>
