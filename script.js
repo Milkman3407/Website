@@ -34,32 +34,6 @@ function productPhotoMarkup(product) {
     .join("");
 }
 
-function featuredPhotoMarkup(product) {
-  const [primaryImage, ...thumbnailImages] = product.images;
-  const thumbnails = [primaryImage, ...thumbnailImages]
-    .filter(Boolean)
-    .map(
-      (image, index) => `
-        <figure class="workbench-thumbnail${index === 0 ? " workbench-thumbnail--active" : ""}">
-          <img src="${image.src}" alt="${image.alt}" loading="lazy" />
-          <figcaption>${image.label}</figcaption>
-        </figure>
-      `
-    )
-    .join("");
-
-  return `
-    <div class="workbench-gallery">
-      <figure class="workbench-hero-photo">
-        <img src="${primaryImage.src}" alt="${primaryImage.alt}" loading="eager" />
-      </figure>
-      <div class="workbench-thumbnail-row">
-        ${thumbnails}
-      </div>
-    </div>
-  `;
-}
-
 function productBadgeMarkup(product) {
   const badges = [product.status, product.category, ...(product.badges || [])].filter(Boolean);
 
@@ -171,13 +145,12 @@ function renderProducts() {
     catalogCount.textContent = String(PRODUCTS.length);
   }
 
-  PRODUCTS.forEach((p, index) => {
-    const isFeatured = index === 0;
+  PRODUCTS.forEach((p) => {
     const item = document.createElement("article");
     item.className = [
       "product-item",
       "product-card",
-      isFeatured ? "workbench-featured-product" : "workbench-secondary-product",
+      "workbench-secondary-product",
       `product-card--${tokenClass(p.category)}`,
       p.materialClass || `material-${tokenClass(p.material)}`
     ].join(" ");
@@ -185,7 +158,7 @@ function renderProducts() {
     item.dataset.category = p.category || "";
     item.dataset.material = p.material || "";
     item.innerHTML = `
-      ${isFeatured ? featuredPhotoMarkup(p) : `<div class="product-photo-grid">${productPhotoMarkup(p)}</div>`}
+      <div class="product-photo-grid">${productPhotoMarkup(p)}</div>
       <div class="product-copy">
         <div class="product-heading-row">
           <div class="product-title-block">
