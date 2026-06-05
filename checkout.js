@@ -5,6 +5,8 @@ const cart = new Map(loadCartEntries());
 const cartEl = document.getElementById("cart");
 const totalEl = document.getElementById("total");
 const checkoutForm = document.getElementById("checkout-form");
+const requestSummaryEl = document.getElementById("request-summary");
+const cartStatusChip = document.getElementById("cart-status-chip");
 
 function persistCart() {
   localStorage.setItem("printCart", JSON.stringify([...cart.entries()]));
@@ -19,15 +21,37 @@ function getCartItems() {
       id: item.id,
       name: item.name,
       quantity: qty,
-      unit: item.unit
+      unit: item.unit,
+      material: item.material,
+      category: item.category,
+      status: item.status,
+      specs: item.specs || []
     };
   }).filter(Boolean);
 }
 
+function getCheckoutDetails() {
+  const formData = new FormData(checkoutForm);
+
+  return {
+    techName: formData.get("techName")?.toString().trim() || "",
+    companyEmail: formData.get("companyEmail")?.toString().trim() || "",
+    workLocation: formData.get("workLocation")?.toString().trim() || ""
+  };
+}
+
+function renderRequestSummary() {
+  if (!requestSummaryEl) return;
+
+  requestSummaryEl.textContent = buildRequestSummary(getCheckoutDetails());
+}
+
 function renderCart() {
   if (cart.size === 0) {
-    cartEl.innerHTML = "<p>Your cart is empty. <a href='index.html'>Add items</a> to continue.</p>";
+    cartEl.innerHTML = "<p class='cart-empty-state'>Your cart is empty. <a href='index.html'>Add items</a> to continue.</p>";
     totalEl.textContent = "";
+    if (cartStatusChip) cartStatusChip.textContent = "Cart empty";
+    renderRequestSummary();
     return;
   }
 
@@ -35,17 +59,28 @@ function renderCart() {
     .map(([id, qty]) => {
       const item = PRODUCTS.find((p) => p.id === id);
       if (!item) return "";
+      const specsHtml = (item.specs || [])
+        .map((spec) => `<span class="cart-item-spec">${spec.label}: ${spec.value}</span>`)
+        .join("");
+
       return `
-        <li>
-          ${item.name} — ${qty} ${item.unit}
-          <button data-remove="${id}" type="button">Remove</button>
+        <li class="cart-item-row" data-product-id="${id}">
+          <div class="cart-item-copy">
+            <span class="cart-item-name">${item.name}</span>
+            <span class="cart-item-meta">${item.category || "3D print"} - ${item.material}</span>
+            <span class="cart-item-quantity">${qty} ${item.unit}</span>
+            <span class="cart-item-spec-list">${specsHtml}</span>
+          </div>
+          <button data-remove="${id}" type="button" aria-label="Remove ${item.name}">Remove</button>
         </li>
       `;
     })
     .join("");
 
-  cartEl.innerHTML = `<ul>${itemsHtml}</ul>`;
+  cartEl.innerHTML = `<ul class="cart-item-list">${itemsHtml}</ul>`;
   totalEl.textContent = `Total quantity: ${[...cart.values()].reduce((sum, qty) => sum + qty, 0)}`;
+  if (cartStatusChip) cartStatusChip.textContent = "Ready to submit";
+  renderRequestSummary();
 
   cartEl.querySelectorAll("button[data-remove]").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -67,9 +102,16 @@ function buildRequestSummary(details) {
     "Requested items:"
   ];
 
-  getCartItems().forEach((item) => {
-    lines.push(`- ${item.name}: ${item.quantity} ${item.unit}`);
-  });
+  const cartItems = getCartItems();
+  if (cartItems.length === 0) {
+    lines.push("- No items selected");
+  } else {
+    cartItems.forEach((item) => {
+      lines.push(`- ${item.name}: ${item.quantity} ${item.unit}`);
+      lines.push(`  Material: ${item.material}`);
+      lines.push(`  Category: ${item.category}`);
+    });
+  }
 
   lines.push("", `Total quantity: ${[...cart.values()].reduce((sum, qty) => sum + qty, 0)}`);
   return lines.join("\n");
@@ -95,12 +137,7 @@ checkoutForm.addEventListener("submit", async (event) => {
     return;
   }
 
-  const formData = new FormData(checkoutForm);
-  const details = {
-    techName: formData.get("techName")?.toString().trim() || "",
-    companyEmail: formData.get("companyEmail")?.toString().trim() || "",
-    workLocation: formData.get("workLocation")?.toString().trim() || ""
-  };
+  const details = getCheckoutDetails();
 
   const payload = new FormData();
   payload.set("name", details.techName);
@@ -128,5 +165,7 @@ checkoutForm.addEventListener("submit", async (event) => {
     submitButton.textContent = "Send Request";
   }
 });
+
+checkoutForm.addEventListener("input", renderRequestSummary);
 
 renderCart();

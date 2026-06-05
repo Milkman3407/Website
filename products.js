@@ -6,6 +6,16 @@ const PRODUCTS = [
     unit: "ea",
     leadTime: "Ready to print",
     material: "White filament",
+    materialClass: "material-white-filament",
+    category: "ONT bracket",
+    equipmentFamily: "Nokia ONT",
+    status: "Field ready",
+    badges: ["ONT mount", "Screw mount", "Cradle bracket"],
+    specs: [
+      { label: "Equipment", value: "Nokia XS010X-Q" },
+      { label: "Install", value: "Wall bracket" },
+      { label: "Finish", value: "White filament" }
+    ],
     images: [
       {
         src: "Inventory/Nokia%20XS010X-Q%20Bracket/nokia-xs010x-q-bracket-empty.jpg",
@@ -26,6 +36,16 @@ const PRODUCTS = [
     unit: "ea",
     leadTime: "Ready to print",
     material: "Black filament",
+    materialClass: "material-black-filament",
+    category: "Wi-Fi bracket",
+    equipmentFamily: "AirTies Wi-Fi",
+    status: "Field ready",
+    badges: ["Wi-Fi mount", "Top clip", "Support cradle"],
+    specs: [
+      { label: "Equipment", value: "AirTies Wi-Fi" },
+      { label: "Install", value: "Wall bracket" },
+      { label: "Finish", value: "Black filament" }
+    ],
     images: [
       {
         src: "Inventory/AirTies/AirTie%2001.jpg",
