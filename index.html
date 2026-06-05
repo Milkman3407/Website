@@ -10,73 +10,85 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=premium-workbench" />
   </head>
   <body class="portal-theme portal-theme-dark">
     <div class="bg-orb orb-1" aria-hidden="true"></div>
     <div class="bg-orb orb-2" aria-hidden="true"></div>
 
-    <header class="container hero app-header">
-      <div class="app-header__brand">
-        <span class="eyebrow app-header__eyebrow">Field operations</span>
-        <h1>3D Print Request Portal</h1>
-        <p class="hero-subtitle">
-          Request available shop prints, including field-ready wall brackets and mounts.
-        </p>
+    <header class="app-topbar" aria-label="Portal header">
+      <div class="app-topbar__menu" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
-
-      <nav class="app-header__actions" aria-label="Portal actions">
-        <a class="cta-button" href="#products">Browse Prints</a>
-        <a class="cart-icon-link cart-action" href="checkout.html" aria-label="Go to checkout">
-          <span class="cart-icon" aria-hidden="true">Cart</span>
-          <span id="cart-count-badge" class="cart-count-badge">0</span>
-        </a>
+      <div class="app-topbar__brand">
+        <strong>3D Print Request Portal</strong>
+        <span>Field Team Equipment</span>
+      </div>
+      <nav class="app-topbar__nav" aria-label="Primary">
+        <a class="app-topbar__nav-link app-topbar__nav-link--active" href="#products">Products</a>
+        <a class="app-topbar__nav-link" href="checkout.html">My Requests</a>
+        <a class="app-topbar__nav-link" href="checkout.html">Orders</a>
+        <a class="app-topbar__nav-link" href="#products">Templates</a>
       </nav>
+      <a class="topbar-cart" href="checkout.html" aria-label="Go to checkout">
+        <span class="topbar-cart__icon" aria-hidden="true">Cart</span>
+        <span id="cart-count-badge" class="cart-count-badge">0</span>
+      </a>
+      <div class="topbar-user" aria-label="Signed in team">
+        <span>
+          <strong>Tech Team</strong>
+          <small>Field Operations</small>
+        </span>
+        <span class="topbar-user__avatar" aria-hidden="true">TT</span>
+      </div>
     </header>
 
-    <main class="container catalog-shell" aria-labelledby="catalog-title">
-      <aside class="catalog-rail compact-filter-rail" aria-label="Catalog status and filters">
-        <section class="rail-panel rail-panel--status" aria-labelledby="rail-status-title">
-          <p class="rail-kicker">Catalog Status</p>
-          <h2 id="rail-status-title">Print request queue</h2>
-          <div class="rail-metrics" aria-label="Catalog metrics">
-            <div class="rail-metric">
-              <span class="rail-metric__value" id="catalog-count">2</span>
-              <span class="rail-metric__label">Active prints</span>
-            </div>
-            <div class="rail-metric">
-              <span class="rail-metric__value">Ready</span>
-              <span class="rail-metric__label">Queue state</span>
-            </div>
-          </div>
-        </section>
-
-        <section class="rail-panel rail-panel--filters" aria-labelledby="rail-filter-title">
-          <p class="rail-kicker">Filters</p>
-          <h2 id="rail-filter-title">Field install gear</h2>
-          <div class="filter-chip-set" role="list" aria-label="Active catalog filters">
-            <span class="filter-chip filter-chip--active" role="listitem">All brackets</span>
-            <span class="filter-chip" role="listitem">ONT mounts</span>
-            <span class="filter-chip" role="listitem">Wi-Fi mounts</span>
-          </div>
-        </section>
-      </aside>
-
-      <section class="content-section catalog-content">
-        <div class="section-header catalog-header">
-          <span class="eyebrow catalog-header__eyebrow">Print queue</span>
-          <h2 id="catalog-title">Available Prints</h2>
-          <p>Current print queue items are ready for installation teams.</p>
+    <main class="container premium-workbench" aria-labelledby="catalog-title">
+      <section class="workbench-products">
+        <div class="section-header workbench-heading">
+          <h1 id="catalog-title">Available Prints</h1>
+          <p>Ready-to-print equipment brackets and mounts.</p>
         </div>
-        <div id="products" class="product-list catalog-list" aria-live="polite"></div>
+        <div id="products" class="product-list premium-product-list" aria-live="polite"></div>
       </section>
+
+      <aside class="request-summary-card" aria-labelledby="request-summary-title">
+        <div class="request-summary-card__header">
+          <h2 id="request-summary-title">Request Summary</h2>
+          <span class="summary-cart-icon" aria-hidden="true">Cart</span>
+        </div>
+        <div id="home-request-summary" class="home-request-summary" aria-live="polite"></div>
+        <a class="continue-checkout-button" href="checkout.html">
+          <span>Continue to Checkout</span>
+          <small>Review details and submit request</small>
+        </a>
+        <div class="summary-assurance-grid" aria-label="Request assurances">
+          <div>
+            <span class="summary-assurance-icon" aria-hidden="true">LT</span>
+            <strong>Lead Time</strong>
+            <small>Ready to print</small>
+          </div>
+          <div>
+            <span class="summary-assurance-icon" aria-hidden="true">QA</span>
+            <strong>Print Quality</strong>
+            <small>Field-tested</small>
+          </div>
+          <div>
+            <span class="summary-assurance-icon" aria-hidden="true">PD</span>
+            <strong>Pickup / Delivery</strong>
+            <small>Local or ship</small>
+          </div>
+        </div>
+      </aside>
     </main>
 
     <footer class="container">
       <small>© 3D Print Requests</small>
     </footer>
 
-    <script src="products.js?v=airties-bracket"></script>
-    <script src="script.js?v=airties-bracket"></script>
+    <script src="products.js?v=premium-workbench"></script>
+    <script src="script.js?v=premium-workbench"></script>
   </body>
 </html>

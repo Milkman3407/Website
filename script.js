@@ -3,6 +3,7 @@ const cart = new Map(loadCartEntries());
 const productsEl = document.getElementById("products");
 const cartCountBadge = document.getElementById("cart-count-badge");
 const catalogCount = document.getElementById("catalog-count");
+const homeRequestSummary = document.getElementById("home-request-summary");
 
 function persistCart() {
   localStorage.setItem("printCart", JSON.stringify([...cart.entries()]));
@@ -33,6 +34,32 @@ function productPhotoMarkup(product) {
     .join("");
 }
 
+function featuredPhotoMarkup(product) {
+  const [primaryImage, ...thumbnailImages] = product.images;
+  const thumbnails = [primaryImage, ...thumbnailImages]
+    .filter(Boolean)
+    .map(
+      (image, index) => `
+        <figure class="workbench-thumbnail${index === 0 ? " workbench-thumbnail--active" : ""}">
+          <img src="${image.src}" alt="${image.alt}" loading="lazy" />
+          <figcaption>${image.label}</figcaption>
+        </figure>
+      `
+    )
+    .join("");
+
+  return `
+    <div class="workbench-gallery">
+      <figure class="workbench-hero-photo">
+        <img src="${primaryImage.src}" alt="${primaryImage.alt}" loading="eager" />
+      </figure>
+      <div class="workbench-thumbnail-row">
+        ${thumbnails}
+      </div>
+    </div>
+  `;
+}
+
 function productBadgeMarkup(product) {
   const badges = [product.status, product.category, ...(product.badges || [])].filter(Boolean);
 
@@ -54,18 +81,103 @@ function productSpecMarkup(product) {
     .join("");
 }
 
+function cartItemMarkup(product, qty) {
+  const previewImage = product.images?.[0];
+  return `
+    <article class="summary-request-item" data-product-id="${product.id}">
+      <img src="${previewImage.src}" alt="${previewImage.alt}" loading="lazy" />
+      <div class="summary-request-copy">
+        <strong>${product.name}</strong>
+        <span>${product.material.replace("filament", "PLA")}</span>
+        <em>${product.leadTime}</em>
+      </div>
+      <div class="summary-qty-control" aria-label="${product.name} quantity">
+        <button type="button" data-summary-decrement="${product.id}" aria-label="Decrease ${product.name} quantity">-</button>
+        <span>${qty}</span>
+        <button type="button" data-summary-increment="${product.id}" aria-label="Increase ${product.name} quantity">+</button>
+      </div>
+    </article>
+  `;
+}
+
+function renderHomeRequestSummary() {
+  if (!homeRequestSummary) return;
+
+  const cartItems = [...cart.entries()]
+    .map(([id, qty]) => {
+      const product = PRODUCTS.find((candidate) => candidate.id === id);
+      return product ? { product, qty } : null;
+    })
+    .filter(Boolean);
+  const totalQty = cartItems.reduce((sum, item) => sum + item.qty, 0);
+
+  if (cartItems.length === 0) {
+    homeRequestSummary.innerHTML = `
+      <div class="summary-empty-state">
+        <p>No prints added yet.</p>
+        <span>Select quantities from the product workbench to build a request.</span>
+      </div>
+      <div class="summary-total-row">
+        <strong>Total Quantity</strong>
+        <span>0 ea</span>
+      </div>
+    `;
+    return;
+  }
+
+  homeRequestSummary.innerHTML = `
+    <div class="summary-request-list">
+      ${cartItems.map((item) => cartItemMarkup(item.product, item.qty)).join("")}
+    </div>
+    <div class="summary-total-row">
+      <strong>Total Quantity</strong>
+      <span>${totalQty} ea</span>
+    </div>
+    <div class="summary-tech-preview">
+      <strong>Technician Details</strong>
+      <p>Enter technician, email, and location on checkout.</p>
+    </div>
+  `;
+
+  homeRequestSummary.querySelectorAll("button[data-summary-decrement]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const id = button.dataset.summaryDecrement;
+      const current = cart.get(id) || 0;
+      if (current <= 1) {
+        cart.delete(id);
+      } else {
+        cart.set(id, current - 1);
+      }
+      persistCart();
+      updateCartBadge();
+      renderHomeRequestSummary();
+    });
+  });
+
+  homeRequestSummary.querySelectorAll("button[data-summary-increment]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const id = button.dataset.summaryIncrement;
+      cart.set(id, (cart.get(id) || 0) + 1);
+      persistCart();
+      updateCartBadge();
+      renderHomeRequestSummary();
+    });
+  });
+}
+
 function renderProducts() {
   productsEl.innerHTML = "";
   if (catalogCount) {
     catalogCount.textContent = String(PRODUCTS.length);
   }
 
-  for (const p of PRODUCTS) {
+  PRODUCTS.forEach((p, index) => {
+    const isFeatured = index === 0;
     const item = document.createElement("article");
     item.className = [
       "product-item",
       "product-card",
-      "product-row",
+      isFeatured ? "workbench-featured-product" : "workbench-secondary-product",
       `product-card--${tokenClass(p.category)}`,
       p.materialClass || `material-${tokenClass(p.material)}`
     ].join(" ");
@@ -73,9 +185,7 @@ function renderProducts() {
     item.dataset.category = p.category || "";
     item.dataset.material = p.material || "";
     item.innerHTML = `
-      <div class="product-photo-grid">
-        ${productPhotoMarkup(p)}
-      </div>
+      ${isFeatured ? featuredPhotoMarkup(p) : `<div class="product-photo-grid">${productPhotoMarkup(p)}</div>`}
       <div class="product-copy">
         <div class="product-heading-row">
           <div class="product-title-block">
@@ -98,7 +208,7 @@ function renderProducts() {
           <label for="qty-${p.id}">Quantity</label>
           <input id="qty-${p.id}" type="number" min="1" value="1" />
         </div>
-        <button data-id="${p.id}">Add to Cart</button>
+        <button data-id="${p.id}">Add to Request</button>
       </div>
     `;
 
@@ -112,10 +222,13 @@ function renderProducts() {
       cart.set(p.id, current + qty);
       persistCart();
       updateCartBadge();
+      renderHomeRequestSummary();
     });
 
     productsEl.appendChild(item);
-  }
+  });
+
+  renderHomeRequestSummary();
 }
 
 renderProducts();
